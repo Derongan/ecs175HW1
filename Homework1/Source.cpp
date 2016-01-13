@@ -8,15 +8,16 @@ void setPixel(int, int);
 void setColor(float, float, float);
 void DDALine(int, int, int, int);
 void bresenhamLine(int, int, int, int);
+void flower(int, int, int);
 void gradient();
 
-const int WIDTH = 300;
-const int HEIGHT = 300;
+const int WIDTH = 200;
+const int HEIGHT = 200;
 
 float COLOR[3] = { 1,1,1 };
 
-float D[] = {50,50,50,150,100,125,100,75,50,50};
-float F[] = { 150,50,150,150,200,150,150,150,150,100,200,100 };
+float D[] = { 25,50,25,150,75,125,75,75,25,50 };
+float F[] = { 125,50,125,150,175,150,125,150,125,100,175,100 };
 
 int main(int argc, char *argv[])
 {
@@ -49,10 +50,14 @@ void display()
 
 	gradient();
 
-	setColor(0, 1.0, 0);
+	setColor(1, 1, 1);
+
+	flower(100, 100, 100);
+
+	setColor(0, 0, 0);
 
 	for (int i = 0; i < 4; i++) {
-		bresenhamLine(D[i*2], D[i*2+1], D[i*2+2], D[i*2+3]);
+		bresenhamLine(D[i * 2], D[i * 2 + 1], D[i * 2 + 2], D[i * 2 + 3]);
 	}
 
 	for (int i = 0; i < 5; i++) {
@@ -81,21 +86,33 @@ void setColor(float r, float g, float b) {
 
 void gradient() {
 	for (int i = 0; i < WIDTH*HEIGHT;i++) {
-		float r = i/float(WIDTH*HEIGHT);
-		float g = (WIDTH*HEIGHT-i) / float(WIDTH*HEIGHT);
-		setColor(r, 0, 0);
-		PixelBuffer[i*3] = COLOR[0];
-		PixelBuffer[i*3 + 1] = COLOR[1];
-		PixelBuffer[i*3 + 2] = COLOR[2];
+		float r = i / float(WIDTH*HEIGHT);
+		float g = (WIDTH*HEIGHT - i) / float(WIDTH*HEIGHT);
+		float b = fabs(g - r);
+		setColor(r, g, b);
+		PixelBuffer[i * 3] = COLOR[0];
+		PixelBuffer[i * 3 + 1] = COLOR[1];
+		PixelBuffer[i * 3 + 2] = COLOR[2];
 	}
 }
 
-//Taken from Computer Graphics with GL
+void flower(int x0, int y0, int r) {
+	//Draws a flower to show our lines can be drawn at all angles
+	int xf;
+	int yf;
+	for (int i = 0; i < 360; i += 15) {
+		xf = r*cosf(i / (2 * 3.14159265));
+		yf = r*sinf(i / (2 * 3.14159265));
+		bresenhamLine(x0, y0, xf + x0, yf + y0);
+	}
+}
+
+//Taken from Computer Graphics with GL. Unused
 void DDALine(int startX, int startY, int endX, int endY) {
 	int dx = endX - startX;
 	int dy = endY - startY;
 	int steps, k;
-	
+
 	float xInc, yInc, x = startX, y = startY;
 
 	if (fabs(dx) > fabs(dy))
@@ -143,10 +160,10 @@ void bresenhamLine(int x0, int y0, int xEnd, int yEnd) {
 				px += 2 * fdy;
 			}
 			else {
-				if ((dx>0 && dy>0) || (dx<0 && dy<0)){
+				if ((dx>0 && dy>0) || (dx < 0 && dy < 0)) {
 					y++;
 				}
-				else{
+				else {
 					y--;
 				}
 				px += 2 * (fdy - fdx);
@@ -173,7 +190,7 @@ void bresenhamLine(int x0, int y0, int xEnd, int yEnd) {
 				py += 2 * fdx;
 			}
 			else {
-				if ((dx>0 && dy>0) || (dx<0 && dy<0)) {
+				if ((dx>0 && dy>0) || (dx < 0 && dy < 0)) {
 					x++;
 				}
 				else {
