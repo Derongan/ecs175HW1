@@ -8,8 +8,9 @@ void setPixel(int, int);
 void setColor(float, float, float);
 void DDALine(int, int, int, int);
 void bresenhamLine(int, int, int, int);
-void flower(int, int, int);
+void flower(int, int, int, int);
 void gradient();
+void radialGradient(int, int, int);
 
 const int WIDTH = 200;
 const int HEIGHT = 200;
@@ -48,11 +49,11 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT);
 	glLoadIdentity();
 
-	gradient();
+	radialGradient(WIDTH/2, HEIGHT/2, sqrt(2)*WIDTH/2);
 
-	setColor(1, 1, 1);
+	setColor(0, 0, 1);
 
-	flower(100, 100, 100);
+	flower(100, 100, 100, 10);
 
 	setColor(0, 0, 0);
 
@@ -70,6 +71,7 @@ void display()
 	//window refresh
 	glFlush();
 }
+
 
 void setPixel(int x, int y) {
 	PixelBuffer[x * 3 + y * WIDTH * 3] = COLOR[0];
@@ -96,13 +98,27 @@ void gradient() {
 	}
 }
 
-void flower(int x0, int y0, int r) {
+void radialGradient(int x, int y, int rad) {
+	for (int i = 0; i < WIDTH*HEIGHT;i++) {
+		int iy = i / WIDTH;
+		int ix = i - iy*WIDTH;
+		float r = 1 - (sqrt(pow(x-ix,2)+pow(y-iy,2))/rad);
+		float g = (sqrt(pow(x - ix, 2) + pow(y - iy, 2)) / rad);
+		float b = fabs(g - r);
+		setColor(r, g, b);
+		PixelBuffer[i * 3] = COLOR[0];
+		PixelBuffer[i * 3 + 1] = COLOR[1];
+		PixelBuffer[i * 3 + 2] = COLOR[2];
+	}
+}
+
+void flower(int x0, int y0, int r, int step) {
 	//Draws a flower to show our lines can be drawn at all angles
 	int xf;
 	int yf;
-	for (int i = 0; i < 360; i += 15) {
-		xf = r*cosf(i / (2 * 3.14159265));
-		yf = r*sinf(i / (2 * 3.14159265));
+	for (int i = 0; i < 360; i += step) {
+		xf = r*cosf(i * (3.141592653) / 180);
+		yf = r*sinf(i * (3.141592653) / 180);
 		bresenhamLine(x0, y0, xf + x0, yf + y0);
 	}
 }
