@@ -5,6 +5,12 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Homework1", "Homework1\Homework1.vcxproj", "{436097D9-63F8-4B6E-9D06-985654DA7B50}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8B97C025-05B4-49B8-9B70-83A49001C8A4}"
+	ProjectSection(SolutionItems) = preProject
+		Makefile = Makefile
+		README.txt = README.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
