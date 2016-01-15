@@ -72,7 +72,9 @@ void display()
 	glFlush();
 }
 
-
+/// <summary>Sets a pixel to the current color</summary>
+/// <param name="x">The x coordinate</param>
+/// <param name="y">The y coordinate</param>
 void setPixel(int x, int y) {
 	PixelBuffer[x * 3 + y * WIDTH * 3] = COLOR[0];
 	PixelBuffer[x * 3 + y * WIDTH * 3 + 1] = COLOR[1];
